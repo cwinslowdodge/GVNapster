@@ -1,6 +1,8 @@
 package com.company;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -49,7 +51,7 @@ public class NapsterView implements ActionListener{
 
     // start of the search panel variables
 
-    JLabel searchLabel;
+    //JLabel searchLabel;
 
     JLabel keywordLabel;
 
@@ -61,7 +63,7 @@ public class NapsterView implements ActionListener{
 
     // start of the function panel variables.
 
-    JLabel ftpLabel;
+    //JLabel ftpLabel;
 
     JLabel commandLabel;
 
@@ -80,9 +82,12 @@ public class NapsterView implements ActionListener{
 
         overPanel = new JPanel(new BorderLayout());
 
-        connectPanel = new JPanel(new GridLayout(2,5)); //giving each sub panel a little border would ne nice.
+        connectPanel = new JPanel(new GridLayout(2,5));
+        connectPanel.setBorder(new TitledBorder(new LineBorder(Color.gray, 3), "Connection"));
         searchPanel = new JPanel(new BorderLayout());
+        searchPanel.setBorder(new TitledBorder(new LineBorder(Color.gray, 3), "Search"));
         functionPanel = new JPanel(new BorderLayout());
+        functionPanel.setBorder(new TitledBorder(new LineBorder(Color.gray, 3), "FTP"));
 
         //connect panel items
         serverHostname = new JLabel("Server Hostname: ");
@@ -121,7 +126,6 @@ public class NapsterView implements ActionListener{
         connectPanel.add(quitButton);
 
         //search panel items
-        searchLabel = new JLabel("Search");
 
         keywordLabel = new JLabel("Keyword: ");
 
@@ -133,14 +137,12 @@ public class NapsterView implements ActionListener{
 
         searchButton.addActionListener(this);
 
-        searchPanel.add(searchLabel, BorderLayout.NORTH);
         searchPanel.add(keywordLabel, BorderLayout.WEST);
         searchPanel.add(searchField, BorderLayout.CENTER);
         searchPanel.add(searchButton, BorderLayout.EAST);
         searchPanel.add(serverResults, BorderLayout.SOUTH);
 
         //function panel items
-        ftpLabel = new JLabel("FTP");
 
         commandLabel = new JLabel("Enter Command: ");
 
@@ -152,7 +154,6 @@ public class NapsterView implements ActionListener{
 
         goButton.addActionListener(this);
 
-        functionPanel.add(ftpLabel, BorderLayout.NORTH);
         functionPanel.add(commandLabel, BorderLayout.WEST);
         functionPanel.add(commandField, BorderLayout.CENTER);
         functionPanel.add(goButton, BorderLayout.EAST);
