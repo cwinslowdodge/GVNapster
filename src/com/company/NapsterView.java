@@ -73,6 +73,9 @@ public class NapsterView implements ActionListener{
 
     JTextArea programOutput;
 
+    String[] jTableHeaders = { "Speed", "Hostname", "File Name"};
+
+    Object[][] ourData = { }; //our data is initially null.
 
     public NapsterView(Client passedClient){
 
@@ -133,7 +136,9 @@ public class NapsterView implements ActionListener{
 
         searchButton = new JButton("Search");
 
-        serverResults = new JTable(); //might need extra constructor stuff to set it up for what we want.
+        serverResults = new JTable(ourData, jTableHeaders); //our data is empty, need to redefine it and update the table once
+        //we hit search and get back some results. EDIT So we update data with the values from the server, then we call
+        //serverResults.fireTableDataChanged();
 
         searchButton.addActionListener(this);
 

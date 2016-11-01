@@ -2,6 +2,7 @@ package com.company;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  * Created by Blaze on 10/23/16.
@@ -129,7 +130,7 @@ public class Client {
         }
     }
 
-    public String searchServer(String searchingFor, Socket serverSocket) {
+    public Object[][] searchServer(String searchingFor, Socket serverSocket) {
         try {
             BufferedReader inputS = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
             BufferedWriter outputS = new BufferedWriter(new OutputStreamWriter(serverSocket.getOutputStream()));
@@ -137,12 +138,59 @@ public class Client {
             outputS.write("SEARCH " + searchingFor + " \r\n");
             outputS.flush();
 
-            String results = inputS.readLine(); //way over simplified. needs to be expanded later
-            return results;
+            String resultsSize = "";
+            while(resultsSize.equals("")){
+                resultsSize = inputS.readLine(); //read the size of the results array,
+            }
+
+            Object[][] ourData = new Object[Integer.parseInt(resultsSize)][];
+
+            for(int x = 0; x < Integer.parseInt(resultsSize); x++){
+                String[] instanceData = inputS.readLine().split(",");
+                ourData[x] = instanceData;
+            }
+
+            return ourData;
         } catch (Exception e) {
             System.out.println("Something happened with search");
-            return "Whoops";
+            return null;
         }
+    }
+
+    public void sendServerMetaData(Socket serverSocket, String ipAddress, String speed){
+        try {
+            DataOutputStream dataOut = new DataOutputStream(serverSocket.getOutputStream());
+
+            ArrayList<String> ourDirectory = getDirectory();
+
+            File localFile;
+            for(String ourFile : ourDirectory){
+                localFile = new File(ourFile);
+                String toSend = speed + " " + ipAddress + " " + localFile.getName(); //we might need more file meta
+                // data set up and sending than we have right now.
+                dataOut.writeUTF(toSend+" \r\n");
+                dataOut.flush();
+            }
+
+            dataOut.close();
+
+        } catch (IOException e) {
+            System.out.println("Whoops in metadata sending");
+            e.printStackTrace();
+        }
+    }
+
+    private ArrayList<String> getDirectory() {
+        ArrayList<String> listContents = new ArrayList<String>();
+
+        File dir = new File("./data"); //one dot for in IDE, two for CLI usage
+        File[] dirList = dir.listFiles();
+
+        for (File file : dirList) {
+            listContents.add(file.getName());
+        }
+
+        return listContents;
     }
 }
 
