@@ -138,7 +138,10 @@ public class Client {
             outputS.write("SEARCH " + searchingFor + " \r\n");
             outputS.flush();
 
-            String resultsSize = inputS.readLine(); //read the size of the results array,
+            String resultsSize = "";
+            while(resultsSize.equals("")){
+                resultsSize = inputS.readLine(); //read the size of the results array,
+            }
 
             Object[][] ourData = new Object[Integer.parseInt(resultsSize)][];
 
