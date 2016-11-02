@@ -35,7 +35,7 @@ final class FtpRequest implements Runnable {
         // input stream
         BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-        // Send Welcome Response to Client
+        // Send Welcome Response to ClientToPeer
         response(os, "Response: 220 Welcome to JFTP." + CRLF);
 
         // command loop
@@ -87,7 +87,40 @@ final class FtpRequest implements Runnable {
                     dataSock.close(); //added to close things
                     break; //added to get us back to listening for other instructions.
                 }
-                response(os, "Response: 226 Closing data connection." + CRLF);
+                response(os, "Response: 226 Closing data connection." + CRLF); //pretty sure never gets called but leaving alone
+
+            }
+
+            if(clientCommand[0].equals("RETR_M")) {
+                //response(os, "Response: 202 RETR not implemented." + CRLF);
+                boolean report = false;
+                ServerSocket dataSock = new ServerSocket(dataPort);
+
+                response(os, "Response: 225 Data Connection Open." + CRLF);
+                while(true) {
+                    Socket dataConn = dataSock.accept();
+
+                    // Create Data Handler
+                    DataRequest dataHandler = new DataRequest(dataConn, commandExport);
+
+                    // Data handler Thread
+                    Thread dThread = new Thread(dataHandler);
+
+                    // run
+                    dThread.start();
+                    dThread.join();
+                    report = dataHandler.getError();
+                    if(!report){
+                        response(os, "Response: 226 Closing data connection." + CRLF);
+                    }
+                    else{
+                        response(os, "Response: 426 Something broke." + CRLF);
+                    }
+
+                    dataSock.close(); //added to close things
+                    break; //added to get us back to listening for other instructions.
+                }
+                response(os, "Response: 226 Closing data connection." + CRLF); //pretty sure never gets called but leaving alone
 
             }
 
