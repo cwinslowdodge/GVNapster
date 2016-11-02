@@ -11,11 +11,11 @@ public class Main {
         //then we call the view constructor, pass it our client object, and we can use it in our view
         //to carry our our client based methods, like asking the server who has a file, and then getting the
         //file from that user once their ip address and port numbers are given.
-        Client ourClient = new Client();
-        //ourClient.connect("12", 12); //unnecessary line to make sure that our client methods actually are reachable through
+        ClientToPeer ourClientToPeer = new ClientToPeer();
+        //ourClientToPeer.connect("12", 12); //unnecessary line to make sure that our client methods actually are reachable through
         //the client object.
 
-        NapsterView ourView = new NapsterView(ourClient);
+        NapsterView ourView = new NapsterView(ourClientToPeer);
     }
 
 }

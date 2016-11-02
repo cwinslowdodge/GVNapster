@@ -17,7 +17,7 @@ public class NapsterView implements ActionListener{
 
     Socket centralServer; //our globally accessible socket to the centralized server.
 
-    Client ourClient;
+    ClientToPeer ourClientToPeer;
 
     JFrame ourFrame;
 
@@ -77,9 +77,9 @@ public class NapsterView implements ActionListener{
 
     Object[][] ourData = { }; //our data is initially null.
 
-    public NapsterView(Client passedClient){
+    public NapsterView(ClientToPeer passedClientToPeer){
 
-        ourClient = passedClient;
+        ourClientToPeer = passedClientToPeer;
 
         ourFrame = new JFrame();
 
